@@ -23,6 +23,7 @@ export async function POST(req: Request) {
 
   const session = event.data.object as Stripe.Checkout.Session;
   const address = session?.customer_details?.address;
+  const userEmail = session?.customer_details?.email;
 
   const addressComponents = [
     address?.line1,
@@ -44,11 +45,14 @@ export async function POST(req: Request) {
         isPaid: true,
         address: addressString,
         phone: session?.customer_details?.phone || "",
+        email: userEmail || "",
       },
       include: {
         orderItems: true,
       },
     });
+
+    // Save email to your database
 
     const productIds = order.orderItems.map((orderItem) => orderItem.productId);
 
