@@ -69,6 +69,7 @@ model Product {
   orderItems  OrderItem[] // Relation to Order model
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  Comment     Comment[]
 
   @@index([storeId])
   @@index([categoryId])
@@ -134,6 +135,17 @@ model Image {
   productId String // Foreign Key to Product
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String // URL of the image
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  productId String // Foreign Key to Product
+  product   Product  @relation(fields: [productId], references: [id])
+  content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
